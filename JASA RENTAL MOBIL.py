@@ -7,29 +7,114 @@ buktiSewa = [] # penyimpanan bukti sewa mobil yang telah dibooking
 recycleMobil = [] # penyimpanan mobil yang telah dihapus dan dimasukkan ke keranjang sampah
 informasiPelanggan = [] # penyimpanan informasi pelanggan yang akan disewa mobil
 
-
-listMobil = [
-    "Toyota Avanza", "Honda Jazz", "Suzuki Ertiga", "Daihatsu Xenia", "Toyota Calya",
-    "Mitsubishi Xpander", "Daihatsu Sigra", "Toyota Rush", "Honda BR-V", "Suzuki XL7"
+list_mobil = [
+    {
+        "nama": "Toyota Avanza",
+        "harga": 200000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 1234 AB",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Honda Jazz",
+        "harga": 250000,
+        "jenis": "Hatchback",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Matic",
+        "plat_nomor": "B 2345 CD",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Suzuki Ertiga",
+        "harga": 220000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 3456 EF",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Daihatsu Xenia",
+        "harga": 210000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 4567 GH",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Toyota Calya",
+        "harga": 180000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 5678 IJ",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Mitsubishi Xpander",
+        "harga": 300000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Matic",
+        "plat_nomor": "B 6789 KL",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Daihatsu Sigra",
+        "harga": 170000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 7890 MN",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Toyota Rush",
+        "harga": 320000,
+        "jenis": "SUV",
+        "bahan_bakar": "Solar",
+        "transmisi": "Matic",
+        "plat_nomor": "B 8901 OP",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Honda BR-V",
+        "harga": 280000,
+        "jenis": "SUV",
+        "bahan_bakar": "Solar",
+        "transmisi": "Matic",
+        "plat_nomor": "B 9012 QR",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Suzuki XL7",
+        "harga": 350000,
+        "jenis": "SUV",
+        "bahan_bakar": "Solar",
+        "transmisi": "Matic",
+        "plat_nomor": "B 0123 ST",
+        "ketersediaan": True
+    }
 ]
-listHarga = [200000, 250000, 220000, 210000, 180000, 300000, 170000, 320000, 280000, 350000]
-jenisMobil = ["MPV", "Hatchback", "MPV", "MPV", "MPV", "MPV", "MPV", "SUV", "SUV", "SUV"]
-jenisBahanBakar = ["Bensin"] * 7 + ["Solar"] * 3
-typeTransmisi = ["Manual", "matic", "Manual", "Manual", "Manual", "matic", "Manual", "matic", "matic", "matic"]
-platNomor = [
-    "B 1234 AB", "B 2345 CD", "B 3456 EF", "B 4567 GH", "B 5678 IJ",
-    "B 6789 KL", "B 7890 MN", "B 8901 OP", "B 9012 QR", "B 0123 ST"
-]
-ketersediaan = [True] * len(listMobil)
 
 def tampilkanMobil(): #fungsi untuk menampilkan daftar mobil yang tersedia
     print("\nDaftar Mobil yang Tersedia:")
     header = ["No", "Nama Mobil", "Harga Per Hari", "Jenis Mobil", "Jenis Bahan Bakar", "Tipe Transmisi", "Plat Nomor", "Ketersediaan"]
     table = []
     for i in range(len(listMobil)):
+        mobil = listMobil[i]
         table.append([
-            i + 1, listMobil[i], f"Rp {listHarga[i]:,}", jenisMobil[i], jenisBahanBakar[i],
-            typeTransmisi[i], platNomor[i], "Tersedia" if ketersediaan[i] else "Tidak Tersedia"
+            i + 1,
+            mobil["nama"],
+            f"Rp {mobil['harga']:,}",
+            mobil["jenis"],
+            mobil["bahan_bakar"],
+            mobil["transmisi"],
+            mobil["plat_nomor"],
+            "Tersedia" if mobil["ketersediaan"] else "Tidak Tersedia"
         ])
     print(tabulate(table, headers=header, tablefmt="simple_grid")) # Untuk menampilkan tabel dengan format yang rapi secara berurutan dari 1 sampai set mobil yang tersedia
     while True:    # while loop untuk memastikan apakah user ingin melanjutkan mengisi identitas dan booking mobil atau tidak
@@ -88,9 +173,9 @@ def pilihMobil(): #fungsi untuk memilih mobil yang ingin di booking
     print("\nMobil yang tersedia untuk booking:")
     header = ["No", "Nama Mobil", "Harga Per Hari", "Ketersediaan"]
     table = []
-    for i in range(len(listMobil)): # Looping untuk menampilkan daftar mobil yang tersedia
-        if ketersediaan[i]:
-            table.append([i + 1, listMobil[i], f"Rp {listHarga[i]:,}", "Tersedia"])
+    for i, mobil in enumerate(listMobil): # Looping untuk menampilkan daftar mobil yang tersedia
+        if mobil["ketersediaan"]:
+            table.append([i + 1, mobil["nama"], f"Rp {mobil['harga']:,}", "Tersedia"])
     if not table: # Jika tidak ada mobil yang tersedia, maka akan menampilkan pesan bahwa semua mobil sedang tidak tersedia (telah dibooking semua)
         print("Maaf, semua mobil sedang tidak tersedia.")
         menuUtamaCustomer()
@@ -103,19 +188,20 @@ def pilihMobil(): #fungsi untuk memilih mobil yang ingin di booking
             return
         if pilihNomor.isdigit() and 1 <= int(pilihNomor) <= len(listMobil): # jika input adalah angka dan berada dalam rentang nomor mobil yang tersedia
             nomorMobil = int(pilihNomor) - 1 
-            if ketersediaan[nomorMobil]: # Jika mobil yang dipilih tersedia
+            mobil = listMobil[nomorMobil]
+            if mobil["ketersediaan"]: # Jika mobil yang dipilih tersedia
                 print("\nDetail Mobil yang Dipilih:")
-                print(tabulate([[listMobil[nomorMobil], f"Rp {listHarga[nomorMobil]:,}", jenisMobil[nomorMobil], jenisBahanBakar[nomorMobil], typeTransmisi[nomorMobil], platNomor[nomorMobil]]],
+                print(tabulate([[mobil["nama"], f"Rp {mobil['harga']:,}", mobil["jenis"], mobil["bahan_bakar"], mobil["transmisi"], mobil["plat_nomor"]]],
                              headers=["Nama Mobil", "Harga Per Hari", "Jenis Mobil", "Jenis Bahan Bakar", "Tipe Transmisi", "Plat Nomor"], tablefmt="simple_grid"))
                 hariSewa = input("Masukan hari, tanggal sewa (Hari, 00-00-0000): ")
                 hariPengembalian = input("Masukan hari, tanggal pengembalian (Hari, 00-00-0000): ")
                 durasi = int(input("Masukkan durasi sewa dalam hari: "))
-                totalHarga = listHarga[nomorMobil] * durasi
+                totalHarga = mobil["harga"] * durasi
                 print(f"\nTotal Harga: Rp {totalHarga:,}\n")
                 konfirmasiBooking = input("Apakah Anda ingin melanjutkan ke tahap pembayaran? (ya/tidak): ").lower() # Memastikan apakah user ingin melanjutkan ke tahap pembayaran atau tidak
                 if konfirmasiBooking == "ya": # Jika user ingin melanjutkan ke tahap pembayaran, maka akan melakukan booking mobil
-                    ketersediaan[nomorMobil] = False
-                    print(f"Booking untuk {listMobil[nomorMobil]} berhasil!")
+                    mobil["ketersediaan"] = False
+                    print(f"Booking untuk {mobil['nama']} berhasil!")
                     print("Silakan lakukan pembayaran.")
                     while True: 
                         global nama, alamat, noTelp, NIK
@@ -129,7 +215,7 @@ def pilihMobil(): #fungsi untuk memilih mobil yang ingin di booking
                             print("Pembayaran berhasil. Terima kasih telah menyewa mobil kami.\nSelamat menikmati perjalanan anda dan tetap berhati-hati dalam berkendara.")
                             buktiSewa.append({
                                 "Nama": identitasPelanggan[-1]["Nama"],
-                                "Mobil": listMobil[nomorMobil],
+                                "Mobil": mobil["nama"],
                                 "Harga": totalHarga,
                                 "Hari Sewa": hariSewa,
                                 "Hari Pengembalian": hariPengembalian,
@@ -145,7 +231,7 @@ def pilihMobil(): #fungsi untuk memilih mobil yang ingin di booking
                             print(f"Pembayaran lebih. Silakan ambil kembalian anda: Rp {pembayaran - totalHarga:,}. Terima kasih telah menyewa mobil kami.\nSelamat menikmati perjalanan anda dan tetap berhati-hati dalam berkendara.")
                             buktiSewa.append({
                                 "Nama": identitasPelanggan[-1]["Nama"],
-                                "Mobil": listMobil[nomorMobil],
+                                "Mobil": mobil["nama"],
                                 "Harga": totalHarga,
                                 "Hari Sewa": hariSewa,
                                 "Hari Pengembalian": hariPengembalian,
@@ -156,8 +242,8 @@ def pilihMobil(): #fungsi untuk memilih mobil yang ingin di booking
                     print("Formulir booking telah dimasukan ke keranjang sewa.\nSilakan lanjutkan ke menu utama untuk melihat keranjang sewa.")
                     keranjangSewaList.append({
                         "Nama": identitasPelanggan[-1]["Nama"],
-                        "Mobil": listMobil[nomorMobil],
-                        "Harga": listHarga[nomorMobil],
+                        "Mobil": mobil["nama"],
+                        "Harga": mobil["harga"],
                         "Hari Sewa": hariSewa,
                         "Hari Pengembalian": hariPengembalian
                     })
@@ -265,27 +351,113 @@ def menuUtamaCustomer(): #fungsi untuk menampilkan menu utama customer
         menuUtamaCustomer()
 
 ################################ SYSTEM JASA RENTAL MOBIL ############################
+# Gabungkan semua atribut mobil menjadi satu list of dicts bernama listMobil
 listMobil = [
-    "Toyota Avanza", "Honda Jazz", "Suzuki Ertiga", "Daihatsu Xenia", "Toyota Calya",
-    "Mitsubishi Xpander", "Daihatsu Sigra", "Toyota Rush", "Honda BR-V", "Suzuki XL7"
+    {
+        "nama": "Toyota Avanza",
+        "harga": 200000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 1234 AB",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Honda Jazz",
+        "harga": 250000,
+        "jenis": "Hatchback",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Matic",
+        "plat_nomor": "B 2345 CD",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Suzuki Ertiga",
+        "harga": 220000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 3456 EF",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Daihatsu Xenia",
+        "harga": 210000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 4567 GH",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Toyota Calya",
+        "harga": 180000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 5678 IJ",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Mitsubishi Xpander",
+        "harga": 300000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Matic",
+        "plat_nomor": "B 6789 KL",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Daihatsu Sigra",
+        "harga": 170000,
+        "jenis": "MPV",
+        "bahan_bakar": "Bensin",
+        "transmisi": "Manual",
+        "plat_nomor": "B 7890 MN",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Toyota Rush",
+        "harga": 320000,
+        "jenis": "SUV",
+        "bahan_bakar": "Solar",
+        "transmisi": "Matic",
+        "plat_nomor": "B 8901 OP",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Honda BR-V",
+        "harga": 280000,
+        "jenis": "SUV",
+        "bahan_bakar": "Solar",
+        "transmisi": "Matic",
+        "plat_nomor": "B 9012 QR",
+        "ketersediaan": True
+    },
+    {
+        "nama": "Suzuki XL7",
+        "harga": 350000,
+        "jenis": "SUV",
+        "bahan_bakar": "Solar",
+        "transmisi": "Matic",
+        "plat_nomor": "B 0123 ST",
+        "ketersediaan": True
+    }
 ]
-listHarga = [200000, 250000, 220000, 210000, 180000, 300000, 170000, 320000, 280000, 350000]
-jenisMobil = ["MPV", "Hatchback", "MPV", "MPV", "MPV", "MPV", "MPV", "SUV", "SUV", "SUV"]
-jenisBahanBakar = ["Bensin", "Bensin", "Bensin", "Bensin", "Bensin", "Bensin", "Bensin", "Bensin", "Bensin", "Bensin"]
-typeTransmisi = ["Manual", "Matic", "Manual", "Manual", "Manual", "Matic", "Manual", "Matic", "Matic", "Matic"]
-platNomor = [
-    "B 1234 AB", "B 2345 CD", "B 3456 EF", "B 4567 GH", "B 5678 IJ",
-    "B 6789 KL", "B 7890 MN", "B 8901 OP", "B 9012 QR", "B 0123 ST"
-]
-ketersediaan = [True] * len(listMobil)
 
 def tableDaftarMobilJasa(): #fungsi untuk menampilkan daftar mobil yang tersedia dan sama seperti fungsi tampilkanMobil pada sistem customer
     header = ["No", "Nama Mobil", "Harga Per Hari", "Jenis Mobil", "Jenis Bahan Bakar", "Tipe Transmisi", "Plat Nomor", "Ketersediaan"]
     table = [] # list untuk menyimpan data mobil yang akan ditampilkan dalam tabel
-    for i in range(len(listMobil)): # Looping untuk menampilkan daftar mobil yang tersedia dan tidak tersedia
+    for i, mobil in enumerate(listMobil): # Looping untuk menampilkan daftar mobil yang tersedia dan tidak tersedia
         table.append([
-            i + 1, listMobil[i], f"Rp {listHarga[i]:,}", jenisMobil[i], jenisBahanBakar[i],
-            typeTransmisi[i], platNomor[i], "Tersedia" if ketersediaan[i] else "Tidak Tersedia"
+            i + 1,
+            mobil["nama"],
+            f"Rp {mobil['harga']:,}",
+            mobil["jenis"],
+            mobil["bahan_bakar"],
+            mobil["transmisi"],
+            mobil["plat_nomor"],
+            "Tersedia" if mobil["ketersediaan"] else "Tidak Tersedia"
         ])
     print(tabulate(table, headers=header, tablefmt="simple_grid")) # Menampilkan tabel dengan format yang rapi secara berurutan dari 1 sampai set mobil yang tersedia
     menuUtamaJasa()
@@ -298,10 +470,16 @@ def tambahMobil(): #fungsi untuk menambahkan mobil baru ke daftar mobil yang ter
             return
         header = ["No", "Nama Mobil", "Harga Per Hari", "Jenis Mobil", "Jenis Bahan Bakar", "Tipe Transmisi", "Plat Nomor", "Ketersediaan"]
         table = []
-        for i in range(len(listMobil)):
+        for i, mobil in enumerate(listMobil):
             table.append([
-                i + 1, listMobil[i], f"Rp {listHarga[i]:,}", jenisMobil[i], jenisBahanBakar[i],
-                typeTransmisi[i], platNomor[i], "Tersedia" if ketersediaan[i] else "Tidak Tersedia"
+                i + 1,
+                mobil["nama"],
+                f"Rp {mobil['harga']:,}",
+                mobil["jenis"],
+                mobil["bahan_bakar"],
+                mobil["transmisi"],
+                mobil["plat_nomor"],
+                "Tersedia" if mobil["ketersediaan"] else "Tidak Tersedia"
             ])
         print(tabulate(table, headers=header, tablefmt="simple_grid")) # Menampilkan tabel dengan format yang rapi secara berurutan dari 1 sampai set mobil yang tersedia
 
@@ -315,20 +493,28 @@ def tambahMobil(): #fungsi untuk menambahkan mobil baru ke daftar mobil yang ter
         print("Apakah anda yakin ingin menambahkan mobil ini?")
         print(tabulate([[nama, f"Rp {harga:,}", jenis, bahan_bakar, transmisi, plat_nomor]], headers=["Nama Mobil", "Harga Per Hari", "Jenis Mobil", "Jenis Bahan Bakar", "Tipe Transmisi", "Plat Nomor"], tablefmt="simple_grid"))
         if input("Ketik 'ya' untuk mengkonfirmasi: ").lower() == "ya": # validasi untuk memastikan apakah user yakin ingin menambahkan mobil baru, jika ya maka akan menambahkan mobil baru ke daftar mobil yang tersedia
-            listMobil.append(nama)
-            listHarga.append(harga)
-            jenisMobil.append(jenis)
-            jenisBahanBakar.append(bahan_bakar)
-            typeTransmisi.append(transmisi)
-            platNomor.append(plat_nomor)
-            ketersediaan.append(True)
+            listMobil.append({
+                "nama": nama,
+                "harga": harga,
+                "jenis": jenis,
+                "bahan_bakar": bahan_bakar,
+                "transmisi": transmisi,
+                "plat_nomor": plat_nomor,
+                "ketersediaan": True
+            })
             print(f"Mobil {nama} telah ditambahkan.")
             header = ["No", "Nama Mobil", "Harga Per Hari", "Jenis Mobil", "Jenis Bahan Bakar", "Tipe Transmisi", "Plat Nomor", "Ketersediaan"]
             table = []
-            for i in range(len(listMobil)):
+            for i, mobil in enumerate(listMobil):
                 table.append([
-                    i + 1, listMobil[i], f"Rp {listHarga[i]:,}", jenisMobil[i], jenisBahanBakar[i],
-                    typeTransmisi[i], platNomor[i], "Tersedia" if ketersediaan[i] else "Tidak Tersedia"
+                    i + 1,
+                    mobil["nama"],
+                    f"Rp {mobil['harga']:,}",
+                    mobil["jenis"],
+                    mobil["bahan_bakar"],
+                    mobil["transmisi"],
+                    mobil["plat_nomor"],
+                    "Tersedia" if mobil["ketersediaan"] else "Tidak Tersedia"
                 ])
             print(tabulate(table, headers=header, tablefmt="simple_grid")) # Menampilkan tabel dengan format yang rapi secara berurutan dari 1 sampai set mobil yang tersedia
             menuUtamaJasa() #kembali ke menu utama jasa setelah menambahkan mobil baru
@@ -339,36 +525,30 @@ def tambahMobil(): #fungsi untuk menambahkan mobil baru ke daftar mobil yang ter
 def hapusMobil(): # fungsi untuk menghapus mobil dari daftar mobil yang tersedia
     header = ["No", "Nama Mobil", "Harga Per Hari", "Jenis Mobil", "Jenis Bahan Bakar", "Tipe Transmisi", "Plat Nomor", "Ketersediaan"]
     table = []
-    for i in range(len(listMobil)):
+    for i, mobil in enumerate(listMobil):
         table.append([
-            i + 1, listMobil[i], f"Rp {listHarga[i]:,}", jenisMobil[i], jenisBahanBakar[i],
-            typeTransmisi[i], platNomor[i], "Tersedia" if ketersediaan[i] else "Tidak Tersedia"
+            i + 1,
+            mobil["nama"],
+            f"Rp {mobil['harga']:,}",
+            mobil["jenis"],
+            mobil["bahan_bakar"],
+            mobil["transmisi"],
+            mobil["plat_nomor"],
+            "Tersedia" if mobil["ketersediaan"] else "Tidak Tersedia"
         ])
     print(tabulate(table, headers=header, tablefmt="simple_grid")) # menampilkan tabel dengan format yang rapi secara berurutan dari 1 sampai set mobil yang tersedia
     pilihan = input("Pilih mobil yang ingin dihapus (nomor) atau ketik 'keluar' untuk ke menu utama: ")
     if pilihan.lower() == "keluar": # jika user memilih untuk keluar, maka akan kembali ke menu utama jasa
         menuUtamaJasa()
+        return
     try: # validasi untuk memastikan input adalah angka dan berada dalam rentang nomor mobil yang tersedia
         pilihan = int(pilihan) - 1
         if 0 <= pilihan < len(listMobil): # jika input adalah angka dan berada dalam rentang nomor mobil yang tersedia (1 => kesediaan terakhir)
-            if input(f"Apakah Anda yakin ingin menghapus mobil {listMobil[pilihan]}? (ya/tidak): ").lower() == "ya":
-                print(f"Mobil {listMobil[pilihan]} telah dihapus.")
-                recycleMobil.append({ # menyimpan mobil yang dihapus ke keranjang sampah kepada list recycleMobil
-                    "nama": listMobil[pilihan],
-                    "harga": listHarga[pilihan],
-                    "jenis": jenisMobil[pilihan],
-                    "bahan_bakar": jenisBahanBakar[pilihan],
-                    "transmisi": typeTransmisi[pilihan],
-                    "plat_nomor": platNomor[pilihan],
-                    "ketersediaan": ketersediaan[pilihan]
-                })
-                del listMobil[pilihan]
-                del listHarga[pilihan]
-                del jenisMobil[pilihan]
-                del jenisBahanBakar[pilihan]
-                del typeTransmisi[pilihan]
-                del platNomor[pilihan]
-                del ketersediaan[pilihan] # menghapus data mobil yang dipilih dari daftar mobil yang tersedia
+            mobil = listMobil[pilihan]
+            if input(f"Apakah Anda yakin ingin menghapus mobil {mobil['nama']}? (ya/tidak): ").lower() == "ya":
+                print(f"Mobil {mobil['nama']} telah dihapus.")
+                recycleMobil.append(mobil.copy()) # menyimpan mobil yang dihapus ke keranjang sampah kepada list recycleMobil
+                del listMobil[pilihan] # menghapus data mobil yang dipilih dari daftar mobil yang tersedia
                 print("Mobil telah dihapus dan dimasukkan ke keranjang sampah.")
                 menuUtamaJasa()
             else: # jika user tidak yakin ingin menghapus mobil, maka akan membatalkan penghapusan mobil dan kembali ke menu utama jasa
@@ -376,7 +556,7 @@ def hapusMobil(): # fungsi untuk menghapus mobil dari daftar mobil yang tersedia
                 menuUtamaJasa()
         else: # jika input tidak valid, maka akan menampilkan pesan bahwa pilihan tidak valid
             print("Pilihan tidak valid.")
-            return pilihan
+            return
     except ValueError: # jika input bukan angka, maka akan menampilkan pesan bahwa input tidak valid dan akan kembali ke menu tambah mobil
         print("Input tidak valid.")
     menuUtamaJasa()
@@ -393,17 +573,12 @@ def kembalikanMobil(): # fungsi untuk mengembalikan mobil yang telah dihapus dar
     pilihan = input("Pilih mobil yang ingin dikembalikan (nomor) atau ketik 'keluar' untuk ke menu utama: ")
     if pilihan.lower() == "keluar": # jika user memilih untuk keluar, maka akan kembali ke menu utama jasa
         menuUtamaJasa()
+        return
     try: # validasi untuk memastikan input adalah angka dan berada dalam rentang nomor mobil yang tersedia di keranjang sampah
         pilihan = int(pilihan) - 1
         if 0 <= pilihan < len(recycleMobil): # jika input adalah angka dan berada dalam rentang nomor mobil yang tersedia di keranjang sampah
-            mobil = recycleMobil[pilihan]
-            listMobil.append(mobil['nama'])
-            listHarga.append(mobil['harga'])
-            jenisMobil.append(mobil['jenis'])
-            jenisBahanBakar.append(mobil['bahan_bakar'])
-            typeTransmisi.append(mobil['transmisi'])
-            platNomor.append(mobil['plat_nomor'])
-            ketersediaan.append(mobil['ketersediaan'])
+            mobil = recycleMobil.pop(pilihan)
+            listMobil.append(mobil)
             print(f"Mobil {mobil['nama']} telah dikembalikan.")
             menuUtamaJasa()
         else: # jika input bukan angka atau berada di luar rentang nomor mobil yang tersedia di keranjang sampah, maka akan menampilkan pesan bahwa pilihan tidak valid dan akan kembali ke menu tambah mobil
@@ -420,11 +595,16 @@ def kesediaanMobil(): # fungsi untuk menampilkan daftar mobil yang tersedia
     print("Daftar Mobil Tersedia:")
     header = ["No", "Nama Mobil", "Harga Per Hari", "Jenis Mobil", "Jenis Bahan Bakar", "Tipe Transmisi", "Plat Nomor"]
     table = []
-    for i in range(len(listMobil)):
-        if ketersediaan[i]:
+    for i, mobil in enumerate(listMobil):
+        if mobil["ketersediaan"]:
             table.append([
-                i + 1, listMobil[i], f"Rp {listHarga[i]:,}", jenisMobil[i], jenisBahanBakar[i],
-                typeTransmisi[i], platNomor[i]
+                i + 1,
+                mobil["nama"],
+                f"Rp {mobil['harga']:,}",
+                mobil["jenis"],
+                mobil["bahan_bakar"],
+                mobil["transmisi"],
+                mobil["plat_nomor"]
             ])
     print(tabulate(table, headers=header, tablefmt="simple_grid")) # Menampilkan tabel dengan format yang rapi secara berurutan dari 1 sampai set mobil yang tersedia
     menuUtamaJasa() # kembali ke menu utama jasa setelah menampilkan daftar mobil yang tersedia
@@ -433,7 +613,7 @@ def updateHargaMobil(): # fungsi untuk mengupdate harga mobil yang tersedia
     header = ["No", "Nama Mobil", "Harga Per Hari"]
     table = []
     for i in range(len(listMobil)):
-        table.append([i + 1, listMobil[i], f"Rp {listHarga[i]:,}"])
+        table.append([i + 1, listMobil[i]["nama"], f"Rp {listMobil[i]['harga']:,}"])
     print(tabulate(table, headers=header, tablefmt="simple_grid")) # Menampilkan tabel dengan format yang rapi secara berurutan dari 1 sampai set mobil yang tersedia
     pilihan = input("Pilih nomor mobil yang ingin diupdate harganya (atau ketik 'keluar' untuk kembali): ")
     if pilihan.lower() == "keluar": # jika user memilih untuk keluar, maka akan kembali ke menu utama jasa
@@ -442,11 +622,11 @@ def updateHargaMobil(): # fungsi untuk mengupdate harga mobil yang tersedia
     try: # validasi untuk memastikan input adalah angka dan berada dalam rentang nomor mobil yang tersedia
         idx = int(pilihan) - 1
         if 0 <= idx < len(listMobil): # jika input adalah angka dan berada dalam rentang nomor mobil yang tersedia
-            harga_baru = input(f"Masukkan harga baru untuk {listMobil[idx]} (dalam Rp): ")
+            harga_baru = input(f"Masukkan harga baru untuk {listMobil[idx]['nama']} (dalam Rp): ")
             if harga_baru.isdigit(): # jika input adalah angka, maka akan mengupdate harga mobil yang dipilih
-                listHarga[idx] = int(harga_baru)
+                listMobil[idx]['harga'] = int(harga_baru)
                 if input("apakah anda yakin ingin mengupdate harga mobil ini? (ya/tidak): ").lower() == "ya": # validasi untuk memastikan apakah user yakin ingin mengupdate harga mobil ini?
-                    print(f"Harga mobil {listMobil[idx]} berhasil diupdate menjadi Rp {listHarga[idx]:,}.")
+                    print(f"Harga mobil {listMobil[idx]['nama']} berhasil diupdate menjadi Rp {listMobil[idx]['harga']:,}.")
                     menuUtamaJasa() # kembali ke menu utama jasa setelah mengupdate harga mobil
                 else:
                     print("Pengubahan dibatalkan.")
@@ -467,10 +647,16 @@ def cariMobil(): # fungsi untuk mencari mobil berdasarkan nama
     table = [] # list untuk menyimpan data mobil yang akan ditampilkan dalam tabel
     found = False
     for i in range(len(listMobil)):
-        if keyword in listMobil[i].lower(): # jika nama mobil yang dicari ada dalam daftar mobil yang tersedia (walaupun tidak persis sama ex: "Toyota" akan menemukan "Toyota Avanza")
+        if keyword in listMobil[i]["nama"].lower(): # jika nama mobil yang dicari ada dalam daftar mobil yang tersedia (walaupun tidak persis sama ex: "Toyota" akan menemukan "Toyota Avanza")
             table.append([
-                i + 1, listMobil[i], f"Rp {listHarga[i]:,}", jenisMobil[i], jenisBahanBakar[i],
-                typeTransmisi[i], platNomor[i], "Tersedia" if ketersediaan[i] else "Tidak Tersedia"
+                i + 1,
+                listMobil[i]["nama"],
+                f"Rp {listMobil[i]['harga']:,}",
+                listMobil[i]["jenis"],
+                listMobil[i]["bahan_bakar"],
+                listMobil[i]["transmisi"],
+                listMobil[i]["plat_nomor"],
+                "Tersedia" if listMobil[i]["ketersediaan"] else "Tidak Tersedia"
             ]) # menambahkan data mobil yang ditemukan ke dalam tabel
             found = True # menandakan bahwa mobil ditemukan
     if found:
