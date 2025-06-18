@@ -1,144 +1,79 @@
-# Sistem Customer Rental Mobil Sederhana (Console Python)
+# Rental Mobil Sederhana
 
-Aplikasi ini adalah program simulasi rental mobil berbasis terminal menggunakan Python. Sistem ini mendukung dua peran utama (**Admin** dan **Customer**) untuk mengelola armada mobil, melakukan booking, pembayaran, serta administrasi pelanggan secara sederhana. Tampilan tabel menggunakan library [tabulate](https://pypi.org/project/tabulate/) agar output lebih rapi.
-
----
-
-## Daftar Isi
-
-- [Fitur Aplikasi](#fitur-aplikasi)
-- [Struktur Data](#struktur-data)
-- [Penjelasan Fungsi](#penjelasan-fungsi)
-- [Alur Program](#alur-program)
-- [Instalasi & Cara Menjalankan](#instalasi--cara-menjalankan)
-- [Contoh Penggunaan](#contoh-penggunaan)
-- [Catatan & Pengembangan Lanjut](#catatan--pengembangan-lanjut)
+A **simple car rental system** written in Python using the `tabulate` library for pretty terminal tables. This project provides two main interfaces:
+- **Admin (Rental Service/Jasa)**: Manage car data, prices, availability, and view customer info.
+- **Customer**: Browse, book, and pay for car rentals, view booking cart and rental receipts.
 
 ---
 
-## Fitur Aplikasi
+## Features and Explanations
 
-### Role & Login
-- **Admin**
-  - Login dengan username dan password.
-  - Mengelola data mobil (tambah, hapus, update harga, recycle bin, cari, cek ketersediaan).
-  - Melihat data pelanggan.
-- **Customer**
-  - Dapat melihat mobil, booking, mengisi identitas, membayar, cek keranjang sewa, dan melihat bukti sewa.
+### Customer Features
 
-### Manajemen Mobil (Admin)
-- Melihat daftar semua mobil (tersedia/tidak).
-- Menambah mobil baru.
-- Menghapus mobil (soft delete ke recycle bin).
-- Mengembalikan mobil dari recycle bin.
-- Update harga per hari.
-- Cari mobil berdasarkan nama.
-- Cek ketersediaan mobil saja.
+| Feature                | Description                                                                                      | Example / Notes                                                   |
+|------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| **View Available Cars**| Shows a table of all cars with status "Available" or "Not Available".                           | User sees car brand, price, type, fuel, transmission, plate, etc. |
+| **Input Identity**     | Users must fill in Name, Address, Phone Number (min 10 digits), and valid 16-digit NIK.         | Input is validated for completeness and correctness.              |
+| **Book a Car**         | Select a car, enter rental and return date, input rental duration.                              | System calculates total price.                                    |
+| **Flexible Payment**   | Option to pay directly after booking or postpone and move order to cart.                        | Useful if user doesn't have enough cash or wants to pay later.    |
+| **Cart Management**    | Orders not paid go to "cart". User can pay for all at once from cart.                           | Cart can contain multiple bookings.                               |
+| **View Rental Receipt**| Shows proof of completed (paid) rentals, including all details.                                 | Tabulated for clarity.                                            |
+| **Input Validation**   | All user inputs are checked. Invalid entries prompt re-input.                                   | E.g. Phone/NIK must be digits.                                    |
+| **Logout**             | Exit to login screen.                                                                           |                                                                 |
+| **Exit**               | Closes the program.                                                                             |                                                                 |
 
-### Proses Sewa (Customer)
-- Lihat daftar mobil tersedia.
-- Input identitas (validasi nama, alamat, nomor telepon, NIK).
-- Pilih mobil, tanggal sewa, durasi, booking.
-- Pembayaran: validasi kurang, pas, lebih.
-- Jika batal bayar, booking masuk keranjang sewa.
-- Lihat dan bayar keranjang sewa.
-- Cek bukti sewa (history).
+#### More Customer Flow Examples
 
-### Validasi & Antarmuka
-- Validasi nomor telepon & NIK.
-- Tabel rapi via `tabulate`.
-- Menu interaktif, konfirmasi setiap proses penting.
+1. **Book & Pay Immediately**
+    - Select car → Fill identity → Pick car → Set dates → Confirm booking → Pay
+2. **Book & Pay Later**
+    - Select car → Fill identity → Pick car → Set dates → Confirm booking → Choose "No" at payment
+    - Order moves to cart
+    - From main menu, select "Keranjang Sewa" and finish payment later
 
 ---
 
-## Struktur Data
+### Admin Features
 
-- **listMobil**: List of dict, data master armada mobil.
-- **identitasPelanggan**: List of dict, identitas pelanggan yang booking.
-- **keranjangSewaList**: List of dict, booking yang belum dibayar.
-- **buktiSewa**: List of dict, booking yang sudah dibayar.
-- **recycleMobil**: List of dict, mobil yang dihapus (keranjang sampah).
+| Feature                   | Description                                                                                   | Example / Notes                                             |
+|---------------------------|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------|
+| **View All Cars**         | Shows all cars, available or not, in a formatted table.                                       | Admin sees everything a customer sees, plus unavailable.    |
+| **Search Cars**           | Search by name (partial/full match, case-insensitive).                                        | Typing "toyota" matches all Toyota cars.                    |
+| **Update Car Price**      | Select car, enter new price, confirm.                                                         | Price is shown and changed instantly.                       |
+| **Add New Car**           | Fill in car details: name, price, type, fuel, transmission, plate number.                     | Confirmation required before adding.                        |
+| **Delete Car**            | Remove a car from active list; goes to "recycle bin" (not deleted permanently).               | Can be restored anytime.                                    |
+| **Restore Car**           | Return a deleted car from "recycle bin" back to active list.                                  | Ensures accidental deletion is not fatal.                   |
+| **View Only Available Cars**| Filter and show only cars with "available" status.                                          | Quick overview for rental stock.                            |
+| **View Customer Info**    | See all identities that have booked at least once.                                            | Each entry: name, address, phone, NIK.                      |
+| **Logout**                | Return to login screen.                                                                       |                                                           |
+| **Exit**                  | Closes the program.                                                                           |                                                           |
 
----
+#### More Admin Flow Examples
 
-## Penjelasan Fungsi
-
-### Fungsi Customer
-
-- **tampilkanMobil()**: Tabel semua mobil, lanjut ke input identitas & booking.
-- **inputIdentitas()**: Input data diri dengan validasi.
-- **pilihMobil()**: Pilih mobil, tentukan tanggal, durasi, proses booking & pembayaran.
-- **keranjangSewaMenu()**: Tampilkan keranjang booking yang belum dibayar, proses pembayaran.
-- **lihatBuktiSewa()**: Cek history/bukti sewa yang sudah dilakukan.
-- **menuUtamaCustomer()**: Menu utama customer.
-
-### Fungsi Admin
-
-- **tableDaftarMobilJasa()**: Lihat semua mobil (tersedia/tidak).
-- **tambahMobil()**: Tambahkan mobil baru.
-- **hapusMobil()**: Soft-delete mobil (masuk recycle bin).
-- **kembalikanMobil()**: Restore mobil dari recycle bin.
-- **kesediaanMobil()**: Tampilkan hanya mobil yang tersedia.
-- **updateHargaMobil()**: Update harga sewa.
-- **cariMobil()**: Cari mobil berdasarkan nama.
-- **menuUtamaJasa()**: Menu utama admin.
-
-### Fungsi Umum
-
-- **login()**: Menu awal login sebagai admin/customer.
-- **if __name__ == "__main__"**: Entry point aplikasi.
+- **Add Car**: Add a new brand or type when the rental business expands.
+- **Delete/Restore Car**: Temporarily remove a car for maintenance, then restore it when ready.
+- **Update Price**: Adjust prices during high/low season.
+- **View Customer Data**: Check identities for reporting or contacting renters.
 
 ---
 
-## Alur Program
+## Data Structures
 
-1. **Login**  
-   - Pilih peran (admin/customer)
-   - Admin: Username `SukmaBagusYTTTA`, Password `Sukma123`
-   - Customer: Langsung masuk
-
-2. **Admin**
-   - Daftar mobil, tambah, hapus, update harga, recycle bin, cari, cek ketersediaan, lihat pelanggan, logout, keluar
-
-3. **Customer**
-   - Lihat mobil → input identitas → pilih mobil → booking & bayar atau keranjang sewa
-   - Lihat keranjang sewa & bayar
-   - Lihat bukti sewa
-   - Logout, keluar
+| Name                  | Type   | Usage                                                    |
+|-----------------------|--------|----------------------------------------------------------|
+| `listMobil`           | list   | List of all car dictionaries                             |
+| `identitasPelanggan`  | list   | Stores dicts of each customer identity                   |
+| `keranjangSewaList`   | list   | Stores dicts of pending bookings (cart)                  |
+| `buktiSewa`           | list   | Stores dicts of completed/payed bookings                 |
+| `recycleMobil`        | list   | Stores dicts of deleted cars (can be restored)           |
 
 ---
 
-## Instalasi & Cara Menjalankan
+## Example Usage
 
-1. **Install library tabulate**
-   ```
-   pip install tabulate
-   ```
+### Customer
 
-2. **Simpan kode ke `main.py`**  
-   (copy seluruh kode program ke file `main.py`)
-
-3. **Jalankan aplikasi**
-   ```
-   python main.py
-   ```
-
----
-
-## Contoh Penggunaan
-
-### 1. Login Customer
-
-```
-=== Selamat Datang di Sistem Jasa Rental Mobil ===
-1. Masuk sebagai Admin
-2. Masuk sebagai Pelanggan
-Apakah Anda ingin masuk sebagai (1) Admin atau (2) Pelanggan? (ketik 1 atau 2): 2
-```
-
----
-
-### 2. Daftar Mobil (Customer)
+#### Book & Pay in Full
 
 ```
 === Menu Utama Customer ===
@@ -150,290 +85,154 @@ Apakah Anda ingin masuk sebagai (1) Admin atau (2) Pelanggan? (ketik 1 atau 2): 
 Silakan pilih menu (1/2/3/4/5): 1
 
 Daftar Mobil yang Tersedia:
-╔════╤═════════════════╤═════════════════╤═════════════╤══════════════════╤════════════════╤═════════════╤═════════════════╗
-│ No │ Nama Mobil      │ Harga Per Hari  │ Jenis Mobil │ Jenis Bahan Bakar│ Tipe Transmisi │ Plat Nomor  │ Ketersediaan   │
-╟────┼─────────────────┼─────────────────┼─────────────┼──────────────────┼────────────────┼─────────────┼───────────────╢
-│ 1  │ Toyota Avanza   │ Rp 200,000      │ MPV         │ Bensin           │ Manual         │ B 1234 AB   │ Tersedia      │
-│ ...│ ...             │ ...             │ ...         │ ...              │ ...            │ ...         │ ...           │
-╚════╧═════════════════╧═════════════════╧═════════════╧══════════════════╧════════════════╧═════════════╧═════════════════╝
+...
+
 Lanjut mengisi identitas dan booking mobil? (ya/tidak): ya
-```
 
----
-
-### 3. Proses Booking & Pembayaran
-
-```
 Masukkan Identitas Anda:
-Nama: Ahmad
-Alamat: Jl. Melati No. 10
-Nomor Telepon: 081234567890
+Nama: John
+Alamat: Jl. Kenanga
+Nomor Telepon: 081212345678
 NIK: 1234567890123456
 
-Identitas Anda:
-Nama: Ahmad
-Alamat: Jl. Melati No. 10
-Nomor Telepon: 081234567890
-NIK: 1234567890123456
-apakah identitas anda sudah benar? (ya/tidak): ya
+...
 
-Mobil yang tersedia untuk booking:
-╔════╤═════════════════╤═════════════════╤══════════════╗
-│ No │ Nama Mobil      │ Harga Per Hari  │ Ketersediaan │
-╟────┼─────────────────┼─────────────────┼──────────────╢
-│ 1  │ Toyota Avanza   │ Rp 200,000      │ Tersedia     │
-│ 2  │ Honda Jazz      │ Rp 250,000      │ Tersedia     │
-╚════╧═════════════════╧═════════════════╧══════════════╝
-
-Pilih nomor mobil yang ingin Anda booking (atau ketik 'kembali' untuk kembali ke menu utama): 2
-
-Detail Mobil yang Dipilih:
-╔═══════════════╤═══════════════╤════════════╤══════════════════╤════════════════╤═════════════╗
-│ Nama Mobil    │ Harga Per Hari│ Jenis Mobil│ Jenis Bahan Bakar│ Tipe Transmisi │ Plat Nomor  │
-╟───────────────┼───────────────┼────────────┼──────────────────┼────────────────┼─────────────╢
-│ Honda Jazz    │ Rp 250,000    │ Hatchback  │ Bensin           │ matic          │ B 2345 CD   │
-╚═══════════════╧═══════════════╧════════════╧══════════════════╧════════════════╧═════════════╝
-
-Masukan hari, tanggal sewa (Hari, 00-00-0000): Senin, 10-07-2025
-Masukan hari, tanggal pengembalian (Hari, 00-00-0000): Kamis, 13-07-2025
+Pilih nomor mobil yang ingin Anda booking: 1
+Masukan hari, tanggal sewa (Hari, 00-00-0000): Selasa, 16-07-2025
+Masukan hari, tanggal pengembalian (Hari, 19-07-2025): Jumat, 19-07-2025
 Masukkan durasi sewa dalam hari: 3
 
-Total Harga: Rp 750,000
+Total Harga: Rp 600,000
 
 Apakah Anda ingin melanjutkan ke tahap pembayaran? (ya/tidak): ya
+Masukkan jumlah uang pembayaran: 650000
 
-Masukkan jumlah uang pembayaran: 800000
-Pembayaran lebih. Silakan ambil kembalian anda: Rp 50,000. Terima kasih telah menyewa mobil kami.
+Pembayaran lebih. Silakan ambil kembalian anda: Rp 50,000.
+Terima kasih telah menyewa mobil kami.
 Selamat menikmati perjalanan anda dan tetap berhati-hati dalam berkendara.
 ```
 
----
-
-### 4. Keranjang Sewa (Jika Booking Ditunda)
+#### Book Now, Pay Later (Cart)
 
 ```
-=== Menu Utama Customer ===
-1. Daftar Mobil
-2. Keranjang Sewa
-3. Lihat Bukti Sewa
-4. Logout
-5. Keluar
-Silakan pilih menu (1/2/3/4/5): 2
+Apakah Anda ingin melanjutkan ke tahap pembayaran? (ya/tidak): tidak
+Formulir booking telah dimasukan ke keranjang sewa.
+Silakan lanjutkan ke menu utama untuk melihat keranjang sewa.
+```
 
+#### Pay for All in Cart
+
+```
 === Keranjang Sewa ===
-╔═════╤═══════════════╤═══════════════╤═════════════════════╤═════════════════════╗
-│ Nama│ Mobil         │ Harga         │ Hari Sewa          │ Hari Pengembalian   │
-╟─────┼───────────────┼───────────────┼────────────────────┼─────────────────────╢
-│ Ahmad│ Honda Jazz   │ Rp 250,000    │ Senin, 10-07-2025  │ Kamis, 13-07-2025   │
-╚═════╧═══════════════╧═══════════════╧═════════════════════╧═════════════════════╝
++--------+--------------+-----------+---------------------+------------------------+
+| Nama   | Mobil        | Harga     | Hari Sewa           | Hari Pengembalian      |
++--------+--------------+-----------+---------------------+------------------------+
+| John   | Toyota Avanza| Rp 200000 | Selasa, 16-07-2025  | Jumat, 19-07-2025      |
++--------+--------------+-----------+---------------------+------------------------+
 
 Melanjutkan pembayaran? (ya/tidak): ya
-Masukkan jumlah uang pembayaran: 750000
+Total Harga: Rp 200,000
+Masukkan jumlah uang pembayaran: 200000
 Pembayaran pas. Terima kasih telah menyewa mobil kami.
 Selamat menikmati perjalanan anda dan tetap berhati-hati dalam berkendara.
 ```
 
----
-
-### 5. Lihat Bukti Sewa
+#### View Rental Receipt
 
 ```
-=== Menu Utama Customer ===
-1. Daftar Mobil
-2. Keranjang Sewa
-3. Lihat Bukti Sewa
-4. Logout
-5. Keluar
-Silakan pilih menu (1/2/3/4/5): 3
-
 === Bukti Sewa ===
-╔═════╤══════════════╤══════════════╤═════════════════════╤═════════════════════╤════════════╗
-│ Nama│ Mobil        │ Harga        │ Hari Sewa          │ Hari Pengembalian   │ Durasi     │
-╟─────┼──────────────┼──────────────┼────────────────────┼─────────────────────┼────────────╢
-│ Ahmad│ Honda Jazz  │ Rp 750,000   │ Senin, 10-07-2025  │ Kamis, 13-07-2025   │ 3          │
-╚═════╧══════════════╧══════════════╧═════════════════════╧═════════════════════╧════════════╝
++--------+--------------+-----------+---------------------+------------------------+--------+
+| Nama   | Mobil        | Harga     | Hari Sewa           | Hari Pengembalian      | Durasi |
++--------+--------------+-----------+---------------------+------------------------+--------+
+| John   | Toyota Avanza| 600000    | Selasa, 16-07-2025  | Jumat, 19-07-2025      | 3      |
++--------+--------------+-----------+---------------------+------------------------+--------+
 ```
 
 ---
 
-### 6. Login Admin
+### Admin
+
+#### Add Car
 
 ```
-=== Selamat Datang di Sistem Jasa Rental Mobil ===
-1. Masuk sebagai Admin
-2. Masuk sebagai Pelanggan
-Apakah Anda ingin masuk sebagai (1) Admin atau (2) Pelanggan? (ketik 1 atau 2): 1
-Masukkan username admin: SukmaBagusYTTTA
-Masukkan password admin: Sukma123
-Login berhasil!
-```
-
----
-
-### 7. Tambah Mobil (Admin)
-
-```
-Pilih menu (1-10): 4
-
 Apakah Anda ingin menambahkan mobil baru? (ya/tidak): ya
 Masukkan nama mobil: Nissan Livina
-Masukkan harga per hari (dalam Rp): 210000
+Masukkan harga per hari (dalam Rp): 250000
 Masukkan jenis mobil: MPV
 Masukkan jenis bahan bakar: Bensin
-Masukkan tipe transmisi: Manual
-Masukkan plat nomor: B 3456 ZX
-
-Apakah anda yakin ingin menambahkan mobil ini?
-╔═══════════════╤═══════════════╤════════════╤══════════════════╤════════════════╤═════════════╗
-│ Nama Mobil    │ Harga Per Hari│ Jenis Mobil│ Jenis Bahan Bakar│ Tipe Transmisi │ Plat Nomor  │
-╟───────────────┼───────────────┼────────────┼──────────────────┼────────────────┼─────────────╢
-│ Nissan Livina │ Rp 210,000    │ MPV        │ Bensin           │ Manual         │ B 3456 ZX   │
-╚═══════════════╧═══════════════╧════════════╧══════════════════╧════════════════╧═════════════╝
+Masukkan tipe transmisi: Matic
+Masukkan plat nomor: B 1123 XY
 Ketik 'ya' untuk mengkonfirmasi: ya
 Mobil Nissan Livina telah ditambahkan.
 ```
 
----
-
-### 8. Hapus & Kembalikan Mobil (Admin)
+#### Delete and Restore Car
 
 ```
-Pilih menu (1-10): 5
-Pilih mobil yang ingin dihapus (nomor) atau ketik 'keluar' untuk ke menu utama: 10
-Apakah Anda yakin ingin menghapus mobil Nissan Livina? (ya/tidak): ya
-Mobil Nissan Livina telah dihapus.
-Mobil telah dihapus dan dimasukkan ke keranjang sampah.
+Pilih mobil yang ingin dihapus (nomor): 3
+Apakah Anda yakin ingin menghapus mobil Suzuki Ertiga? (ya/tidak): ya
+Mobil Suzuki Ertiga telah dihapus dan dimasukkan ke keranjang sampah.
 
-Pilih menu (1-10): 6
 Daftar mobil di keranjang sampah:
-╔════╤═══════════════╤═════════════╗
-│ No │ Nama Mobil    │ Plat Nomor  │
-╟────┼───────────────┼─────────────╢
-│ 1  │ Nissan Livina │ B 3456 ZX   │
-╚════╧═══════════════╧═════════════╝
-Pilih mobil yang ingin dikembalikan (nomor) atau ketik 'keluar' untuk ke menu utama: 1
-Mobil Nissan Livina telah dikembalikan.
++----+---------------+--------------+
+| No | Nama Mobil    | Plat Nomor   |
++----+---------------+--------------+
+| 1  | Suzuki Ertiga | B 3456 EF    |
++----+---------------+--------------+
+Pilih mobil yang ingin dikembalikan (nomor): 1
+Mobil Suzuki Ertiga telah dikembalikan.
 ```
 
----
-
-### 9. Update Harga Mobil (Admin)
+#### Update Price
 
 ```
-Pilih menu (1-10): 3
 Pilih nomor mobil yang ingin diupdate harganya (atau ketik 'keluar' untuk kembali): 2
-Masukkan harga baru untuk Honda Jazz (dalam Rp): 275000
+Masukkan harga baru untuk Honda Jazz (dalam Rp): 300000
 apakah anda yakin ingin mengupdate harga mobil ini? (ya/tidak): ya
-Harga mobil Honda Jazz berhasil diupdate menjadi Rp 275,000.
+Harga mobil Honda Jazz berhasil diupdate menjadi Rp 300,000.
 ```
 
----
-
-### 10. Cari Mobil (Admin)
+#### View Customer Data
 
 ```
-Pilih menu (1-10): 2
-Masukkan nama mobil yang ingin dicari: jazz
-
-╔════╤═════════════════╤═══════════════╤═════════════╤══════════════════╤════════════════╤═════════════╤═══════════════╗
-│ No │ Nama Mobil      │ Harga Per Hari│ Jenis Mobil │ Jenis Bahan Bakar│ Tipe Transmisi │ Plat Nomor  │ Ketersediaan │
-╟────┼─────────────────┼───────────────┼─────────────┼──────────────────┼────────────────┼─────────────┼──────────────╢
-│ 2  │ Honda Jazz      │ Rp 275,000    │ Hatchback   │ Bensin           │ matic          │ B 2345 CD   │ Tersedia     │
-╚════╧═════════════════╧═══════════════╧═════════════╧══════════════════╧════════════════╧═════════════╧═══════════════╝
-```
-
----
-
-### 11. Lihat Informasi Pelanggan (Admin)
-
-```
-Pilih menu (1-10): 7
-
 Informasi Pelanggan:
-Nama: Ahmad, Alamat: Jl. Melati No. 10, Nomor Telepon: 081234567890, NIK: 1234567890123456
+Nama: John, Alamat: Jl. Kenanga, Nomor Telepon: 081212345678, NIK: 1234567890123456
+Nama: Alice, Alamat: Jl. Melati, Nomor Telepon: 085612345678, NIK: 6543210987654321
 ```
 
 ---
 
-### 12. Validasi Identitas Customer: Error
+## Requirements
 
-```
-Masukkan Identitas Anda:
-Nama: 
-Alamat: Jl. Kenangan
-Nomor Telepon: 0812345
-NIK: 12345678
+- Python 3.x
+- `tabulate` library
 
-Semua field harus diisi. Silakan coba lagi.
+Install tabulate if needed:
+```bash
+pip install tabulate
 ```
 
 ---
 
-### 13. Pembayaran Kurang (Customer)
+## Running the Program
 
-```
-Total Harga: Rp 600,000
-
-Apakah Anda ingin melanjutkan ke tahap pembayaran? (ya/tidak): ya
-Booking untuk Suzuki Ertiga berhasil!
-Silakan lakukan pembayaran.
-Masukkan jumlah uang pembayaran: 500000
-Pembayaran kurang. Silakan masukkan jumlah uang lagi sebesar Rp 100,000.
-Masukkan jumlah uang pembayaran: 100000
-Pembayaran berhasil. Terima kasih telah menyewa mobil kami.
-Selamat menikmati perjalanan anda dan tetap berhati-hati dalam berkendara.
+```bash
+python3 rental_mobil.py
 ```
 
 ---
 
-### 14. Pilihan Menu Tidak Valid
+## Customization
 
-```
-=== Menu Utama Customer ===
-1. Daftar Mobil
-2. Keranjang Sewa
-3. Lihat Bukti Sewa
-4. Logout
-5. Keluar
-Silakan pilih menu (1/2/3/4/5): 7
-Pilihan tidak valid. Silakan coba lagi.
-```
+- Change admin username/password in the `login()` function.
+- Add/modify cars in the `listMobil` variable.
+- Modify/add features as needed!
 
 ---
 
-### 15. Admin Logout & Customer Keluar
+## License
 
-```
-Pilih menu (1-10): 9
-Logout berhasil!
-=== Selamat Datang di Sistem Jasa Rental Mobil ===
-1. Masuk sebagai Admin
-2. Masuk sebagai Pelanggan
-Apakah Anda ingin masuk sebagai (1) Admin atau (2) Pelanggan? (ketik 1 atau 2):
-
-=== Menu Utama Customer ===
-1. Daftar Mobil
-2. Keranjang Sewa
-3. Lihat Bukti Sewa
-4. Logout
-5. Keluar
-Silakan pilih menu (1/2/3/4/5): 5
-Terima kasih telah menggunakan layanan kami.
-```
+MIT License.  
+Feel free to use, modify, or distribute for educational purposes.
 
 ---
-
-## Catatan & Pengembangan Lanjut
-
-- **Data hanya di memori (RAM), setelah aplikasi ditutup data hilang.**
-- **Validasi input sudah lengkap** (NIK, no telepon, pemilihan menu).
-- **Pengembangan lebih lanjut:**  
-  - Simpan data ke file/database
-  - Export bukti sewa ke file
-  - Multi-user login
-  - Fitur pengelolaan status armada (servis, maintenance, dsb)
-  - Filter & pencarian lebih canggih
-
----
-
-**Aplikasi ini dibuat untuk simulasi, tugas kuliah, dan pembelajaran sistem rental mobil sederhana.**
